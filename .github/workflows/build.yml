@@ -1,0 +1,64 @@
+
+name: Build GARANT SERVICE APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Extract project ZIP
+        run: |
+          unzip GARANT_SERVICE_GITHUB_STARTER.zip
+          cd GARANT_SERVICE_GITHUB
+          echo "PROJECT_DIR=$PWD" >> $GITHUB_ENV
+
+      - name: Install dependencies
+        run: |
+          cd "$PROJECT_DIR"
+          npm install
+
+      - name: Build web app
+        run: |
+          cd "$PROJECT_DIR"
+          npm run build
+
+      - name: Add Android
+        run: |
+          cd "$PROJECT_DIR"
+          npx cap add android
+
+      - name: Sync Android
+        run: |
+          cd "$PROJECT_DIR"
+          npx cap sync android
+
+      - name: Build APK
+        run: |
+          cd "$PROJECT_DIR/android"
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: GARANT-SERVICE-APK
+          path: ${{ env.PROJECT_DIR }}/android/app/build/outputs/apk/debug/app-debug.apk
