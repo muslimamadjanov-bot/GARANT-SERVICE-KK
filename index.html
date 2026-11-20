@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GARANT SERVICE — Премиальный сервис замены масла</title>
+    <style>
+        :root {
+            --gold: #d4af37;
+            --gold-light: #f3e5ab;
+            --gold-dark: #aa8c2c;
+            --bg-dark: #121212;
+            --surface-dark: #1e1e1e;
+            --surface-card: #2a2a2a;
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
+            --border-color: #333333;
+            --accent-green: #4caf50;
+            --accent-red: #f44336;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding-bottom: 50px;
+        }
+
+        /* Элитная шапка */
+        header {
+            background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+            border-bottom: 2px solid var(--gold);
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+        }
+
+        .oil-drop {
+            width: 35px;
+            height: 45px;
+            background: linear-gradient(to bottom, var(--gold), var(--gold-dark));
+            border-radius: 0 50% 50% 50%;
+            transform: rotate(-45deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px var(--gold);
+        }
+
+        .oil-drop::after {
+            content: '';
+            width: 15px;
+            height: 15px;
+            background-color: var(--bg-dark);
+            border-radius: 50%;
+        }
+
+        .logo-text h1 {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: linear-gradient(45deg, var(--gold-light), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-text p {
+            font-size: 12px;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        .dev-badge {
+            background-color: rgba(212, 175, 55, 0.1);
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        /* Контейнеры */
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .section-title h2 {
+            font-size: 28px;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .section-title p {
+            color: var(--text-muted);
+        }
+
+        /* Карточки */
+        .card {
+            background-color: var(--surface-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: rgba(212, 175, 55, 0.3);
+        }
+
+        /* Форма записи */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--gold);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--surface-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-main);
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--gold);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(45deg, var(--gold-dark), var(--gold));
+            color: var(--bg-dark);
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Табло очереди */
+        .queue-table {
+            width: 1.6;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--surface-dark);
+            color: var(--gold);
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status- queued { background-color: rgba(33, 150, 243, 0.2); color: #2196f3; border: 1px solid #2196f3; }
+        .status-in-progress { background-color: rgba(255, 152, 0, 0.2); color: #ff9800; border: 1px solid #ff9800; }
+        .status-completed { background-color: rgba(76, 175, 80, 0.2); color: #4CAF50; border: 1px solid #4CAF50; }
+
+        /* Скрытая панель разработчика */
+        #dev-panel {
+            display: none;
+            background-color: #0a0a0a;
+            border: 2px dashed var(--gold);
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 12px;
+        }
+
+        .dev-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        /* Модальные окна */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.85);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: var(--surface-card);
+            padding: 40px;
+            border-radius: 12px;
+            border: 1px solid var(--gold);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-area" onclick="handleLogoClick()">
+            <div class="oil-drop"></div>
+            <div class="logo-text">
+                <h1>Garant Service</h1>
+                <p>Элитный сервис замены масла</p>
+            </div>
+        </div>
+        <div id="status- indicator" class="dev-badge">Клиентский режим</div>
+    </header>
+
+    <div class="container">
+        <!-- Секция записи -->
+        <section class="card">
+            <div class="section-title">
+                <h2>Электронная очередь</h2>
+                <p>Забронируйте удобное время обслуживания</p>
+            </div>
+            
+            <form id="booking-form" onsubmit="handleBooking(event)">
+                <div class="form-group">
+                    <label for="client-name">Ваше имя</label>
+                    <input type="text" id="client-name" required placeholder="Введите ваше имя">
+                </div>
+                <div class="form-group">
+                    <label for="car-model">Марка и модель автомобиля</label>
+                    <input type="text" id="car-model" required placeholder="Например: Toyota Camry">
+                </div>
+                <div class="form-group">
+                    <label for="phone-number">Номер телефона</label>
+                    <input type="tel" id="phone-number" required placeholder="+996 XXX XX XX XX">
+                </div>
+                <div class="form-group">
+                    <label for="service-type">Тип масла / Услуга</label>
+                    <select id="service-type" required>
+                        <option value="Полная замена (Мотор+Фильтр)">Полная замена (Мотор + Фильтр)</option>
+                        <option value="Замена масла в АКПП">Замена масла в АКПП</option>
+                        <option value="Экспресс-замена">Экспресс-замена</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="booking-date">Дата</label>
+                    <input type="date" id="booking-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="booking-time">Время визита</label>
+                    <select id="booking-time" required>
+                        <!-- Слоты будут сгенерированы JS -->
+                    </select>
+                </div>
+                <button type="submit" class="btn">Забронировать слот</button>
+            </form>
+        </section>
+
+        <!-- Секция Панели Разработчика -->
+        <section id="dev-panel">
+            <div class="dev-header">
+                <h3>🔒 Панель управления разработчика</h3>
+                <button onclick="hideDevPanel()" class="btn" style="width: auto; padding: 5px 15px;">Закрыть</button>
+            </div>
+            <div id="dev-controls">
+                <button onclick="requestNotificationPermission()" class="btn" style="margin-bottom: 10px;">🔔 Включить системные уведомления</button>
+                <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 20px;">Уведомления будут приходить при каждом новом бронировании и за 40/20 минут до визита.</p>
+            </div>
+            <h4>Управление талонами</h4>
+            <div style="overflow-x: auto; margin-top: 15px;">
+                <table class="queue-table">
+                    <thead>
+                        <tr>
+                            <th>Клиент</th>
+                            <th>Авто</th>
+                            <th>Телефон</th>
+                            <th>Время</th>
+                            <th>Статус</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dev-tickets-list">
+                        <!-- Заполняется динамически -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Табло очереди (Общее) -->
+        <section class="card">
+            <div class="section-title">
+                <h2>Живая очередь</h2>
+                <p>Актуальный статус обслуживания автомобилей</p>
+            </div>
+            <div style="overflow-x: auto;">
+                <table class="queue-table">
+                    <thead>
+                        <tr>
+                            <th>№</th>
+                            <th>Автомобиль</th>
+                            <th>Услуга</th>
+                            <th>Время</th>
+                            <th>Статус</th>
+                        </tr>
+                    </thead>
+                    <tbody id="public-queue-list">
+                        <!-- Заполняется динамически -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <!-- Модальное окно входа разработчика -->
+    <div id="dev-login-modal" class="modal">
+        <div class="modal-content">
+            <h3 style="color: var(--gold); margin-bottom: 20px;">Доступ разработчика</h3>
+            <p style="margin-bottom: 20px; font-size: 14px;">Введите PIN-код для входа в панель управления:</p>
+            <input type="password" id="dev-pin-input" placeholder="Введите PIN (7777)" style="text-align: center; margin-bottom: 20px;">
+            <button onclick="verifyDevPin()" class="btn">Войти</button>
+            <button onclick="closeDevModal()" class="btn" style="background: none; border: 1px solid var(--border-color); color: var(--text-muted); margin-top: 10px;">Отмена</button>
+        </div>
+    </div>
+
+    <script>
+        const DEVELOPER_CODE = "7777";
+        let clickCount = 0;
+        let tickets = JSON.parse(localStorage.getItem('garant_tickets')) || [];
+        let notifiedEvents = JSON.parse(localStorage.getItem('garant_notified')) || [];
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', () => {
+            setupDateInputs();
+            generateTimeSlots();
+            renderTables();
+            checkAndScheduleNotification();
+            
+            // Проверка разрешений при загрузке
+            if (Notification.permission === 'default') {
+                // можно запросить сразу или по кнопке
+            }
+        });
+
+        function setupDateInputs() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('booking-date').value = today;
+            document.getElementById('booking-date').min = today;
+        }
+
+        function generateTimeSlots() {
+            const timeSelect = document.getElementById('booking-time');
+            timeSelect.innerHTML = '';
+            const startHour = 9;
+            const endHour = 18;
+            
+            for (let h = startHour; h < endHour; h++) {
+                for (let m = 0; m < 60; m += 30) {
+                    const timeString = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+                    const option = document.createElement('option');
+                    option.value = timeString;
+                    option.textContent = timeString;
+                    timeSelect.appendChild(option);
+                }
+            }
+        }
+
+        // Логика кликов по логотипу
+        function handleLogoClick() {
+            clickCount++;
+            if (clickCount >= 5) {
+                clickCount = 0;
+                showDevModal();
+            }
+        }
+
+        function showDevModal() {
+            document.getElementById('dev-login-modal').style.display = 'flex';
+            document.getElementById('dev-pin-input').value = '';
+        }
+
+        function closeDevModal() {
+            document.getElementById('dev-modal').style.display = 'none';
+        }
+
+        function verifyDevPin() {
+            const enteredPin = document.getElementById('dev-pin-input').value;
+            if (enteredPin === DEVELOPER_CODE) {
+                closeDevModal();
+                showDevPanel();
+            } else {
+                alert('Неверный PIN-код!');
+            }
+        }
+
+        function showDevPanel() {
+            document.getElementById('dev-panel').style.display = 'block';
+            document.getElementById('status-indicator').textContent = 'Режим разработчика';
+            document.getElementById('status-indicator').style.backgroundColor = 'rgba(244, 67, 54, 0.2)';
+            document.getElementById('status-indicator').style.color = '#F44336';
+            document.getElementById('status-indicator').style.borderColor = '#F44336';
+        }
+
+        function hideDevPanel() {
+            document.getElementById('dev-panel').style.display = 'none';
+            document.getElementById('status-indicator').textContent = 'Клиентский режим';
+            document.getElementById('status-indicator').style.backgroundColor = 'rgba(212, 175, 55, 0.1)';
+            document.getElementById('status-indicator').style.color = var(--gold);
+        }
+
+        // Обработка бронирования
+        function handleBooking(e) {
+            e.preventDefault();
+            
+            const clientName = document.getElementById('client-name').value;
+            const carModel = document.getElementById('car-model').value;
+            const phoneNumber = document.getElementById('phone-number').value;
+            const serviceType = document.getElementById('service-type').value;
+            const bookingDate = document.getElementById('booking-date').value;
+            const bookingTime = document.getElementById('booking-time').value;
+
+            // Проверка на дубликат слота
+            const isSlotTaken = tickets.some(t => t.date === bookingDate && t.time === bookingTime);
+            if (isSlotTaken) {
+                alert('Извините, этот слот уже занят. Выберите другое время.');
+                return;
+            }
+
+            const newTicket = {
+                id: Date.now(),
+                clientName,
+                carModel,
+                phoneNumber,
+                serviceType,
+                date: bookingDate,
+                time: bookingTime,
+                status: 'queued' // queued, in-progress, completed
+            };
+
+            tickets.push(newTicket);
+            localStorage.setItem('garant_tickets', JSON.stringify(tickets));
+            
+            renderTables();
+            triggerNotification(`Новый талон: ${carModel}`, `${clientName} записался на ${bookingTime}`);
+            
+            document.getElementById('booking-form').reset();
+            setupDateInputs();
+            alert('Успешно забронировано!');
+        }
+
+        // Отрисовка таблиц
+        function renderTables() {
+            const publicList = document.getElementById('public-queue-list');
+            const devList = document.getElementById('dev-tickets-list');
+            
+            publicList.innerHTML = '';
+            devList.innerHTML = '';
+
+            tickets.sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+
+            tickets.forEach((ticket, index) => {
+                // Публичная таблица
+                const pubRow = document.createElement('tr');
+                pubRow.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${ticket.carModel}</td>
+                    <td>${ticket.serviceType}</td>
+                    <td>${ticket.date} ${ticket.time}</td>
+                    <td><span class="status-badge status-${ticket.status}">${getStatusText(ticket.status)}</span></td>
+                `;
+                publicList.appendChild(pubRow);
+
+                // Таблица разработчика
+                const devRow = document.createElement('tr');
+                devRow.innerHTML = `
+                    <td>${ticket.clientName}</td>
+                    <td>${ticket.carModel}</td>
+                    <td>${ticket.phoneNumber}</td>
+                    <td>${ticket.date} ${ticket.time}</td>
+                    <td>
+                        <select onchange="updateStatus(${ticket.id}, this.value)">
+                            <option value="queued" ${ticket.status === 'queued' ? 'selected' : ''}>В очереди</option>
+                            <option value="in-progress" ${ticket.status === 'in-progress' ? 'selected' : ''}>В боксе</option>
+                            <option value="completed" ${ticket.status === 'completed' ? 'selected' : ''}>Выполнено</option>
+                        </select>
+                    </td>
+                    <td><button onclick="deleteTicket(${ticket.id})" style="background:none; border:none; color:var(--accent-red); cursor:pointer;">Удалить</button></td>
+                `;
+                devList.appendChild(devRow);
+            });
+        }
+
+        function getStatusText(status) {
+            switch(status) {
+                case 'queued': return 'В очереди';
+                case 'in-progress': return 'В боксе';
+                case 'completed': return 'Выполнено';
+                default: return 'Ожидание';
+            }
+        }
+
+        function updateStatus(id, newStatus) {
+            tickets = tickets.map(t => t.id === id ? {...t, status: newStatus} : t);
+            localStorage.setItem('garant_tickets', JSON.stringify(tickets));
+            renderTables();
+        }
+
+        function deleteTicket(id) {
+            if(confirm('Удалить этот талон?')) {
+                tickets = tickets.filter(t => t.id !== id);
+                localStorage.setItem('garant_tickets', JSON.stringify(tickets));
+                renderTables();
+            }
+        }
+
+        // Система Уведомлений
+        function requestNotificationPermission() {
+            if ('Notification' in window) {
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        alert('Разрешение на уведомления получено!');
+                    } else {
+                        alert('Разрешение отклонено.');
+                    }
+                });
+            } else {
+                alert('Браузер не поддерживает уведомления.');
+            }
+        }
+
+        function triggerNotification(title, body) {
+            // Звуковой сигнал
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(body);
+                utterance.lang = 'ru-RU';
+                window.speechSynthesis.speak(utterance);
+            }
+
+            // Системное уведомление
+            if ('Notification' in window && Notification.permission === 'granted') {
+                new Notification(title, { body });
+            }
+        }
+
+        function checkAndScheduleNotification() {
+            setInterval(() => {
+                const now = new Date();
+                tickets.forEach(ticket => {
+                    const [year, month, day] = ticket.date.split('-').map(Number);
+                    const [hours, minutes] = ticket.time.split(':').map(Number);
+                    const appointmentTime = new Date(year, month - 1, day, hours, minutes);
+                    
+                    const timeDiffMinutes = (appointmentTime - now) / (1000 * 60);
+
+                    // Проверка на 40 минут
+                    if (timeDiffMinutes <= 40 && timeDiffMinutes > 38 && !notifiedEvents.includes(`${ticket.id}_40`)) {
+                        triggerNotification('Напоминание Garant Service', `У вас запись на замену масла через 40 минут (${ticket.time}).`);
+                        notifiedEvents.push(`${ticket.id}_40`);
+                        localStorage.setItem('garant_notified', JSON.stringify(notifiedEvents));
+                    }
+
+                    // Проверка на 20 минут
+                    if (timeDiffMinutes <= 20 && timeDiffMinutes > 18 && !notifiedEvents.includes(`${ticket.id}_20`)) {
+                        triggerNotification('Ожидаем вас!', `До визита осталось 20 минут. Пожалуйста, не опаздывайте.`);
+                        notifiedEvents.push(`${ticket.id}_20`);
+                        localStorage.setItem('garant_notified', JSON.stringify(notifiedEvents));
+                    }
+                });
+            }, 60000); // Проверка каждую минуту
+        }
+    </script>
+</body>
+</html>
